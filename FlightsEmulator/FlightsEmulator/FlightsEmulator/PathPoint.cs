@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace FlightsEmulator
 {
-    class PathPoint
+    public class PathPoint
     {
         public int id { set; get; }
         public decimal lat { set; get; }

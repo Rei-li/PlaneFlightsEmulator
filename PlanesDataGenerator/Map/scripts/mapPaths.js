@@ -12,7 +12,7 @@
 
     $.Generator.Paths.mapPaths = function () {
         var base = this;
-        var t = 5; // интервал в секундах
+        var t = 1; // интервал в секундах
         var distanceUpDown = 500; // расстояние посадки и взлета в метрах
         var tUp = 250; // интервал взлета в секундах
         var tDown = 500; //  интервал посадки в секундах
@@ -118,46 +118,12 @@
 
 
         var addPointToResults = function(id, point, path, height){
-
-           // var idSaved = id;
             path.push({
                 id: id,
                 lat: point.lat(),
                 lng: point.lng(),
                 alt: height
             });
-
-            //
-            // return new Promise(
-            //     function(resolve, reject) {
-            //         var idSaved = id;
-            //         var elevator = new google.maps.ElevationService;
-            //
-            //         elevator.getElevationForLocations({
-            //             'locations': [ point]
-            //         }, function(results, status) {
-            //             if (status === google.maps.ElevationStatus.OK) {
-            //
-            //                 if (results[0]) {
-            //                     path.push({
-            //                         id: idSaved,
-            //                         lat: point.lat(),
-            //                         lng: point.lng(),
-            //                         alt: results[0].elevation
-            //                     });
-            //                     resolve(idSaved);
-            //                 } else {
-            //                     console.log('No results found');
-            //                 }
-            //             } else {
-            //                 console.log('Elevation service failed due to: ' + status);
-            //             }
-            //         });
-            //     });
-
-
-
-
         };
 
         var getPath = function(polyline) {

@@ -9,9 +9,9 @@ using Newtonsoft.Json.Linq;
 
 namespace FlightsEmulator
 {
-    internal class PlanesRepository
+    internal class PlanesRepository : IPlanesRepository
     {
-        public IList<PlaneModel> Planes = new List<PlaneModel>();
+        private IList<PlaneModel> _planes = new List<PlaneModel>();
 
         private readonly string _file = ConfigurationManager.AppSettings["SourceFile"];
         private readonly string _directoryPath = ConfigurationManager.AppSettings["RepositoryPath"];
@@ -36,16 +36,40 @@ namespace FlightsEmulator
                         plane.Path.Add(p);
                     }
                     plane.Id = planeId;
-                    plane.CurrentLat = plane.Path.First().lat;
-                    plane.CurrentLng = plane.Path.First().lng;
-                    plane.CurrentAlt = plane.Path.First().alt;
-                    Planes.Add(plane);
+                    plane.CurrentLocation = plane.Path.First();
+                    //plane.CurrentLat = plane.Path.First().lat;
+                    //plane.CurrentLng = plane.Path.First().lng;
+                    //plane.CurrentAlt = plane.Path.First().alt;
+                    _planes.Add(plane);
                     planeId++;
                 }
 
             }
-
-
         }
+
+
+        public IList<PlaneModel> GetAllPlanes()
+        {
+            return _planes;
+        }
+
+        public PlaneModel GetPlaneById(int id)
+        {
+            return _planes.FirstOrDefault(p => p.Id == id);
+        }
+
+        public void ResetLocation(int id)
+        {
+            var plane = _planes.FirstOrDefault(p => p.Id == id);
+            if (plane != null)
+            {
+                plane.CurrentLocation = plane.Path.First();
+                //plane.CurrentLat = plane.Path.First().lat;
+                //plane.CurrentLng = plane.Path.First().lng;
+                //plane.CurrentAlt = plane.Path.First().alt;
+            }
+           
+        }
+
     }
 }
