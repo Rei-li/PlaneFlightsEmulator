@@ -5,7 +5,13 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlightsEmulator", "FlightsEmulator\FlightsEmulator.csproj", "{83E75256-B8C8-4FF6-940F-DA0350B6056F}"
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Models", "Models\Models.shproj", "{B19FDD71-2CC2-4ECD-9AEF-72866F8624E2}"
+EndProject
 Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		Models\Models.projitems*{83e75256-b8c8-4ff6-940f-da0350b6056f}*SharedItemsImports = 4
+		Models\Models.projitems*{b19fdd71-2cc2-4ecd-9aef-72866f8624e2}*SharedItemsImports = 13
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
