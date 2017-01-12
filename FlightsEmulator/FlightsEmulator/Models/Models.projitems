@@ -9,6 +9,7 @@
     <Import_RootNamespace>Models</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)InterprocessDTO.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PathPoint.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PlaneModel.cs" />
   </ItemGroup>
