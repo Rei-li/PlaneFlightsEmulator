@@ -1,284 +1,52 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
-using System.Diagnostics;
 using System.IO;
-using System.IO.MemoryMappedFiles;
 using System.Linq;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 
 namespace FlightsEmulator
 {
 
     class Program
     {
-        
-
-        //  static void Main(string[] args)
-        //  {
-        //      IPlanesService planesService = new PlanesService();
-        //      var plane = planesService.GetPlaneById(3);
-        //      var t = plane.JsonOut();
-
-
-
-
-
-        //      //var t2 = JsonConvert.DeserializeObject<PlaneModel>(t);
-        //      //var plane5 = planesService.GetPlaneById(5);
-        //      //var location = planesService.GetCurrentLocation(plane);
-        //      ////Console.WriteLine("lat:" + location.lat + "; lng:" + location.lng + "; alt:" + location.alt);
-
-        //      //planesService.StartFlight(plane).ContinueWith((result) =>
-        //      //{
-        //      //    Console.WriteLine("Plane finished");
-        //      //});
-        //      //bool t = true;
-        //      //planesService.StartFlight(plane5).ContinueWith((result) =>
-        //      //{
-        //      //    t = false;
-        //      //    Console.WriteLine("Plane5 finished");
-        //      //    location = planesService.GetCurrentLocation(plane5);
-        //      //    Console.WriteLine("plane5 - lat:" + location.lat + "; lng:" + location.lng + "; alt:" + location.alt);
-        //      //    planesService.ResetFlight(plane5);
-        //      //    location = planesService.GetCurrentLocation(plane5);
-        //      //    Console.WriteLine("plane5 - lat:" + location.lat + "; lng:" + location.lng + "; alt:" + location.alt);
-
-        //      //});
-
-        //      var tokenSource = new CancellationTokenSource();
-        //      var token = tokenSource.Token;
-
-
-        //      var task = Task.Run(() =>
-        //      {
-        //          var fileName = Guid.NewGuid().ToString();
-        //          var mutexName = Guid.NewGuid().ToString();
-
-        //          var bufferSize = Encoding.Default.GetByteCount(t);
-
-        //          Console.WriteLine(fileName);
-        //          using (MemoryMappedFile mmf = MemoryMappedFile.CreateNew(fileName, bufferSize))
-        //          {
-        //              bool mutexCreated;
-        //              Mutex mutex = new Mutex(true, mutexName, out mutexCreated);
-        //              using (MemoryMappedViewStream stream = mmf.CreateViewStream())
-        //              {
-        //                  BinaryWriter writer = new BinaryWriter(stream);
-        //                  writer.Write(t);
-        //              }
-        //              mutex.ReleaseMutex();
-
-        //              Console.WriteLine(fileName);
-        //              InterprocessDTO dto = new InterprocessDTO()
-        //              {
-        //                  MemoryMappedFileName = fileName,
-        //                  MutexName = mutexName
-        //              };
-
-        //              var process = Process.Start(_display.ToString(), dto.JsonOut().ToString());
-        //              process.WaitForExit();
-        //              var exitCode = process.ExitCode;
-
-        //          }
-
-        //          return fileName;
-        //      }, token);
-        //      //.ContinueWith((b) => {
-        //      //    Console.WriteLine(b.Result);
-        //      //    var process = Process.Start(@"D:\Study\University\Projects\PlaneFlightsEmulator\FlightsEmulator\FlightDisplay\FlightDisplay\bin\Debug\FlightDisplay.exe", b.Result);
-        //      //    process.WaitForExit();
-        //      //    var exitCode = process.ExitCode;
-        //      //});
-        //      //var c = task.ContinueWith((result) =>
-        //      //{
-        //      //    var process = Process.Start(_display.ToString(), fileName);
-
-        //      //    process.WaitForExit();
-
-        //      //    var exitCode = process.ExitCode;
-        //      //}); 
-
-
-        //      //var task = new Task(() =>
-        //      //{
-        //      //   //var fileName =  Guid.NewGuid().ToString();
-
-        //      //   //var bufferSize = Encoding.Default.GetByteCount(t);
-
-
-        //      //   // using (MemoryMappedFile mmf = MemoryMappedFile.CreateNew(fileName, bufferSize))
-        //      //   // {
-        //      //   //     bool mutexCreated;
-        //      //   //     Mutex mutex = new Mutex(true, "testmapmutex", out mutexCreated);
-        //      //   //     using (MemoryMappedViewStream stream = mmf.CreateViewStream())
-        //      //   //     {
-        //      //   //         BinaryWriter writer = new BinaryWriter(stream);
-        //      //   //         writer.Write(t);
-        //      //   //     }
-        //      //   //     mutex.ReleaseMutex();
-        //      //   // }
-
-        //      //   // return fileName;
-
-        //      //    //ProcessStartInfo info = new ProcessStartInfo(@"D:\Study\University\Projects\PlaneFlightsEmulator\FlightsEmulator\FlightDisplay\FlightDisplay\bin\Debug\FlightDisplay.exe");
-        //      //    //    var process = Process.Start(_display.ToString(), fileName);
-
-        //      //    //process.WaitForExit();
-
-        //      //    //var exitCode = process.ExitCode;
-        //      //    //info.UseShellExecute = false;
-        //      //    //info.RedirectStandardInput = true;
-        //      //    //info.RedirectStandardOutput = true;
-
-
-        //      //    //using (Process process = Process.Start(info))
-        //      //    //{
-        //      //    //    StreamWriter sw = process.StandardInput;
-        //      //    //    StreamReader sr = process.StandardOutput;
-
-        //      //    //    while (t)
-        //      //    //    {
-        //      //    //        sw.WriteLine("test");
-        //      //    //        location = planesService.GetCurrentLocation(plane5);
-        //      //    //        Thread.Sleep(1000);
-        //      //    //        sw.WriteLine("plane5 - lat:" + location.lat + "; lng:" + location.lng + "; alt:" + location.alt);
-        //      //    //    }
-
-        //      //    //    //foreach (string command in commands)
-        //      //    //    //{
-        //      //    //    //    sw.WriteLine(command);
-        //      //    //    //}
-
-        //      //    //    sw.Close();
-        //      //    //    //returnvalue = sr.ReadToEnd();
-        //      //    //}
-
-        //      //    //return returnvalue;
-
-        //      //    //AllocConsole();
-        //      //    //Console.WriteLine("test");
-        //      //    //location = planesService.GetCurrentLocation(plane5);
-        //      //    //Thread.Sleep(1000);
-        //      //    //Console.WriteLine("plane5 - lat:" + location.lat + "; lng:" + location.lng + "; alt:" + location.alt);
-        //      //    //i++;
-
-
-        //      //}, token);
-        //      //task.Start();
-        //      //task.ContinueWith((result) =>
-        //      //{
-        //      //    var process = Process.Start(_display.ToString(), fileName);
-
-        //      //    process.WaitForExit();
-
-        //      //    var exitCode = process.ExitCode;
-        //      //});
-
-
-
-        //  //    var task2 = new Task(() =>
-        //  //    {
-
-        //  //        //ProcessStartInfo info = new ProcessStartInfo(@"D:\Study\University\Projects\PlaneFlightsEmulator\FlightsEmulator\FlightDisplay\FlightDisplay\bin\Debug\FlightDisplay.exe");
-        //  //        var process = Process.Start(_display.ToString(), t);
-
-        //  //        process.WaitForExit();
-
-        //  //        var exitCode = process.ExitCode;
-
-
-
-        //  //    }, token);
-        //  //    task2.Start();
-        //  //    //task2.ContinueWith((result) =>
-        //  //    //{
-        //  //    //    Console.WriteLine("2 Finished!");
-        //  //    //});
-
-
-        //  //    var task3 = new Task(() =>
-        //  //    {
-
-        //  //        //ProcessStartInfo info = new ProcessStartInfo(@"D:\Study\University\Projects\PlaneFlightsEmulator\FlightsEmulator\FlightDisplay\FlightDisplay\bin\Debug\FlightDisplay.exe");
-        //  //        var process = Process.Start(@"D:\Study\University\Projects\PlaneFlightsEmulator\FlightsEmulator\FlightDisplay\FlightDisplay\bin\Debug\FlightDisplay.exe", t);
-
-        //  //        process.WaitForExit();
-
-        //  //        var exitCode = process.ExitCode;
-
-
-
-        //  //    }, token);
-        //  //    task3.Start();
-        //  //    //task3.ContinueWith((result) =>
-        //  //    //{
-        //  //    //    Console.WriteLine("3 Finished!");
-        //  //    //});
-        //  //    //var i = 1;
-
-        //  //    //i = 1;
-        //  //    //while (i < 100)
-        //  //    //{
-        //  //    //    location = planesService.GetCurrentLocation(plane);
-        //  //    //    Thread.Sleep(1000);
-        //  //    //    Console.WriteLine("plane - lat:" + location.lat + "; lng:" + location.lng + "; alt:" + location.alt);
-        //  //    //    i++;
-        //  //    //}
-        //  //    //location = planesService.GetCurrentLocation(plane);
-        //  //    //Console.WriteLine("plane - lat:" + location.lat + "; lng:" + location.lng + "; alt:" + location.alt);
-        //  //    //planesService.ResetFlight(plane);
-        //  //    //location = planesService.GetCurrentLocation(plane);
-        //  //    //Console.WriteLine("plane - lat:" + location.lat + "; lng:" + location.lng + "; alt:" + location.alt);
-
-        //  //    //location = planesService.GetCurrentLocation(plane5);
-        //  //    //Console.WriteLine("plane5 - lat:" + location.lat + "; lng:" + location.lng + "; alt:" + location.alt);
-        //  //    //planesService.ResetFlight(plane5);
-        //  //    //location = planesService.GetCurrentLocation(plane5);
-        //  //    //Console.WriteLine("plane5 - lat:" + location.lat + "; lng:" + location.lng + "; alt:" + location.alt);
-
-        //     Console.ReadLine();
-        //}
-
-
-
-
-
         #region Constants
 
         private const string PRINT_PLANES_CMD = "print";
-        private const string SELECT_PLANE_CMD = "select";
-        private const string FLY_UP_CMD = "flyup";
-        private const string RESET_FLIGHT_CMD = "reset";
+        private const string GET_CURRENT_LOCATION_CMD = "locate";
+        private const string GET_STATE_CMD = "status";
+        private const string FLY_UP_CMD = "start";
         private const string EXIT_CMD = "q";
         private const string HELP_CMD = "-help";
 
-        private const string IS_BINARY_FLAG = "-b";
-
         private const int CMD_WITHOUT_PARAM_MAX_ITEM_COUNT = 1;
         private const int CMD_WITH_PARAM_MAX_ITEM_COUNT = 2;
-        private const int CMD_WITH_FLAG_MAX_ITEM_COUNT = 3;
         private const int CMD_PARAM_ARG_NUMBER = 1;
-        private const int CMD_FLAG_ARG_NUMBER = 2;
-
 
         #endregion
 
-        static readonly IPlanesService PlanesService = new PlanesService();
-        static PlaneModel _plane = null;
+        static IPlanesService _planesService = null;
+
         private static void Main(string[] args)
         {
-            Console.WriteLine(Resources.StartMsg);
-            RunCommand();
+            try
+            {
+                _planesService = new PlanesService();
+                Console.WriteLine(Resources.StartMsg);
+                RunCommand();
+            }
+            catch (FileNotFoundException ex)
+            {
+                Console.WriteLine(ex.Message);
+                Console.ReadLine();
+
+            }
         }
 
 
         private static void RunCommand()
         {
-            var command = Console.ReadLine();
+            string command = Console.ReadLine();
+           
             List<string> commandElements = new List<string>();
             if (command != null)
             {
@@ -288,66 +56,93 @@ namespace FlightsEmulator
 
             if (commandElements.Any())
             {
-                switch (commandElements[0])
+                int id = 0;
+                switch (commandElements.First())
                 {
                     case PRINT_PLANES_CMD:
                         if (commandElements.Count == CMD_WITHOUT_PARAM_MAX_ITEM_COUNT)
                         {
-                            var planes = PlanesService.GetAllPlanes();
+                            var planes = _planesService.GetAllPlanes();
                             foreach (var plane in planes)
                             {
-                                PrintPlaneInfo(plane);
+                                
+                                PrintPlaneInfo(plane.Id);
                             }
                         }
-                        else if (commandElements.Count == CMD_WITH_PARAM_MAX_ITEM_COUNT)
+                        else if (commandElements.Count == CMD_WITH_PARAM_MAX_ITEM_COUNT && int.TryParse(commandElements[CMD_PARAM_ARG_NUMBER], out id))
                         {
-                            int id;
-                            if (int.TryParse(commandElements[CMD_PARAM_ARG_NUMBER], out id))
-                            {
-                                var plane = PlanesService.GetPlaneById(id);
-                                PrintPlaneInfo(plane);
-                            }
+                            var plane = _planesService.GetPlaneById(id);
+                            PrintPlaneInfo(plane.Id);
+                        }
+                        else
+                        {
+                            Console.WriteLine(Resources.WrongPlaneNumberdMsg);
                         }
                         RunCommand();
                         break;
 
-                    //case SELECT_PLANE_CMD:
-                    //    if (commandElements.Count >= CMD_WITH_PARAM_MAX_ITEM_COUNT)
-                    //    {
-                    //        int id;
-                    //        if (int.TryParse(commandElements[CMD_PARAM_ARG_NUMBER], out id))
-                    //        {
-                    //            _plane = PlanesService.GetPlaneById(id);
-                    //        }
-                    //    }
-                    //    RunCommand();
-                    //    break;
+                    case GET_CURRENT_LOCATION_CMD:
+
+                        if (commandElements.Count >= CMD_WITH_PARAM_MAX_ITEM_COUNT && int.TryParse(commandElements[CMD_PARAM_ARG_NUMBER], out id))
+                        {
+                            var location = _planesService.GetCurrentLocation(id);
+                            PrintPlaneInfo(id, location.lat, location.lng, location.alt);
+                          
+                        }
+                        else
+                        {
+                            Console.WriteLine(Resources.WrongPlaneNumberdMsg);
+                        }
+                        RunCommand();
+                        break;
+
+                    case GET_STATE_CMD:
+                        if (commandElements.Count >= CMD_WITH_PARAM_MAX_ITEM_COUNT && int.TryParse(commandElements[CMD_PARAM_ARG_NUMBER], out id))
+                        {
+                            Console.WriteLine(
+                                _planesService.CheckIfActive(id) ? Resources.PlaneActiveMsg : Resources.PlaneWaitingMsg,
+                                id);
+                        }
+                        else
+                        {
+                            Console.WriteLine(Resources.WrongPlaneNumberdMsg);
+                        }
+                        RunCommand();
+                        break;
 
                     case FLY_UP_CMD:
-                        if (commandElements.Count >= CMD_WITH_PARAM_MAX_ITEM_COUNT)
+                        if (commandElements.Count >= CMD_WITH_PARAM_MAX_ITEM_COUNT && int.TryParse(commandElements[CMD_PARAM_ARG_NUMBER], out id))
                         {
-                            int id;
-                            if (int.TryParse(commandElements[CMD_PARAM_ARG_NUMBER], out id))
+                            var startTask = _planesService.StartFlight(id);
+                            if (startTask != null)
                             {
-                                PlanesService.StartFlight(id);
+                                startTask.ContinueWith(
+                                    prev =>
+                                    {
+                                        if (prev.Exception != null)
+                                        {
+                                            Console.WriteLine(Resources.SmthWentWrongMsg);
+                                            foreach (var ex in prev.Exception.InnerExceptions)
+                                            {
+                                                Console.WriteLine(ex.Message);
+                                            }
+                                        }
+                                        else
+                                        {
+                                            Console.WriteLine(Resources.SmthWentWrongMsg);
+                                        }
+                                    },
+                                TaskContinuationOptions.OnlyOnFaulted);
                             }
-
-
-
-                            //    var currentPlane = _plane;
-                            //PlanesService.StartFlight(currentPlane).ContinueWith((result) =>
-                            //{
-                            //    Console.WriteLine("Plane number" + currentPlane.Id + " landed");
-                            //});
+                            else
+                            {
+                                Console.WriteLine(Resources.AlreadyActiveMsg);
+                            }
+                            
                         }
-                        RunCommand();
-                        break;
-
-                    case RESET_FLIGHT_CMD:
-                        if (commandElements.Count >= CMD_WITH_PARAM_MAX_ITEM_COUNT)
+                        else
                         {
-                            var name = commandElements[CMD_PARAM_ARG_NUMBER];
-
+                            Console.WriteLine(Resources.WrongPlaneNumberdMsg);
                         }
                         RunCommand();
                         break;
@@ -358,6 +153,19 @@ namespace FlightsEmulator
                     case HELP_CMD:
 
                         Console.WriteLine();
+                        Console.WriteLine(Resources.HelpPrintCmd);
+                        Console.WriteLine();
+                        Console.WriteLine(Resources.HelpStatusCmd);
+                        Console.WriteLine();
+                        Console.WriteLine(Resources.HelpStratCmd);
+                        Console.WriteLine();
+                        Console.WriteLine(Resources.HelpLocationCmd);
+                        Console.WriteLine();
+                        Console.WriteLine(Resources.HelpExitCmd);
+                        Console.WriteLine();
+                        Console.WriteLine(Resources.HelpCmd);
+                        Console.WriteLine();
+
                         RunCommand();
                         break;
 
@@ -369,10 +177,17 @@ namespace FlightsEmulator
             }
         }
 
-        private static void PrintPlaneInfo(PlaneModel plane)
+        private static void PrintPlaneInfo(int id)
         {
-            Console.WriteLine("Plane number: " + plane.Id + "; Current position: lat - " + plane.CurrentLocation.lat +
-                              ", lng - " + plane.CurrentLocation.lng + ", alt - " + plane.CurrentLocation.alt);
+            var status = _planesService.CheckIfActive(id) ? Resources.ActiveStatusMsg : Resources.WaitingStatusMsg;
+            Console.WriteLine(Resources.PlaneInfo, id, status);
+        }
+
+        private static void PrintPlaneInfo(int id, decimal lat, decimal lng, decimal alt)
+        {
+            Console.WriteLine(Resources.PlaneCurrentLocationInfo, id, lat, lng, alt);
+
+            
         }
 
 

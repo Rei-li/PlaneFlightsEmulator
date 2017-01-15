@@ -61,6 +61,123 @@ namespace FlightsEmulator {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to active.
+        /// </summary>
+        internal static string ActiveStatusMsg {
+            get {
+                return ResourceManager.GetString("ActiveStatusMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Plane is already active.
+        /// </summary>
+        internal static string AlreadyActiveMsg {
+            get {
+                return ResourceManager.GetString("AlreadyActiveMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &quot;-help&quot; - prints all available commands.
+        /// </summary>
+        internal static string HelpCmd {
+            get {
+                return ResourceManager.GetString("HelpCmd", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &quot;q&quot; - stop app.
+        /// </summary>
+        internal static string HelpExitCmd {
+            get {
+                return ResourceManager.GetString("HelpExitCmd", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &quot;locate {id}&quot; - prints current plane location.
+        /// </summary>
+        internal static string HelpLocationCmd {
+            get {
+                return ResourceManager.GetString("HelpLocationCmd", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &quot;print {id}&quot; - prints info about all available planes if called without args;   print particular plane info if plane id is entered as argument.
+        /// </summary>
+        internal static string HelpPrintCmd {
+            get {
+                return ResourceManager.GetString("HelpPrintCmd", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &quot;status {id}&quot; - prints if particular plane is active or is waiting.
+        /// </summary>
+        internal static string HelpStatusCmd {
+            get {
+                return ResourceManager.GetString("HelpStatusCmd", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &quot;start {id}&quot; - starts flight, id - number of plane argument.
+        /// </summary>
+        internal static string HelpStratCmd {
+            get {
+                return ResourceManager.GetString("HelpStratCmd", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Plane number {0} is active.
+        /// </summary>
+        internal static string PlaneActiveMsg {
+            get {
+                return ResourceManager.GetString("PlaneActiveMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Plane number: {0}; Current position: lat - {1}, lng - {2}, alt - {3}.
+        /// </summary>
+        internal static string PlaneCurrentLocationInfo {
+            get {
+                return ResourceManager.GetString("PlaneCurrentLocationInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Plane number: {0}; Status: {1}.
+        /// </summary>
+        internal static string PlaneInfo {
+            get {
+                return ResourceManager.GetString("PlaneInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Plane number {0} is waiting.
+        /// </summary>
+        internal static string PlaneWaitingMsg {
+            get {
+                return ResourceManager.GetString("PlaneWaitingMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Something went wrong, please, make sure you have build FlightDisplay.sln.
+        /// </summary>
+        internal static string SmthWentWrongMsg {
+            get {
+                return ResourceManager.GetString("SmthWentWrongMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Welcome to Plane Flights Emulator program. Please use -help command to see the list of available commands.
         /// </summary>
         internal static string StartMsg {
@@ -70,11 +187,29 @@ namespace FlightsEmulator {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to waiting.
+        /// </summary>
+        internal static string WaitingStatusMsg {
+            get {
+                return ResourceManager.GetString("WaitingStatusMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Wrong command.
         /// </summary>
         internal static string WrongCommandMsg {
             get {
                 return ResourceManager.GetString("WrongCommandMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Wrong plane number.
+        /// </summary>
+        internal static string WrongPlaneNumberdMsg {
+            get {
+                return ResourceManager.GetString("WrongPlaneNumberdMsg", resourceCulture);
             }
         }
     }

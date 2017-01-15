@@ -10,7 +10,5 @@ namespace FlightsEmulator
     {
         IList<PlaneModel> GetAllPlanes();
         PlaneModel GetPlaneById(int id);
-        void ResetLocation(int id);
-
     }
 }

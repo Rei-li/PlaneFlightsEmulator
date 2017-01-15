@@ -12,7 +12,7 @@
 
     $.Generator.Paths.mapPaths = function () {
         var base = this;
-        var t = 1; // интервал в секундах
+        var t = 60; // интервал в секундах
         var distanceUpDown = 500; // расстояние посадки и взлета в метрах
         var tUp = 250; // интервал взлета в секундах
         var tDown = 500; //  интервал посадки в секундах

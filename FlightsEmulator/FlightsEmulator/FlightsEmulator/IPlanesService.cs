@@ -8,11 +8,11 @@ namespace FlightsEmulator
 {
     public interface IPlanesService
     {
-        void StartFlight(int id);
-
-        void ResetFlight(int id);
-
+        Task StartFlight(int id);
+  
         PathPoint GetCurrentLocation(int id);
+
+        bool CheckIfActive(int planeId);
 
         IList<PlaneModel> GetAllPlanes();
 

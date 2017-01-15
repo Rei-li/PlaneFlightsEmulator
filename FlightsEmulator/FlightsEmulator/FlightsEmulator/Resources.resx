@@ -117,10 +117,55 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="ActiveStatusMsg" xml:space="preserve">
+    <value>active</value>
+  </data>
+  <data name="AlreadyActiveMsg" xml:space="preserve">
+    <value>Plane is already active</value>
+  </data>
+  <data name="HelpCmd" xml:space="preserve">
+    <value>"-help" - prints all available commands</value>
+  </data>
+  <data name="HelpExitCmd" xml:space="preserve">
+    <value>"q" - stop app</value>
+  </data>
+  <data name="HelpLocationCmd" xml:space="preserve">
+    <value>"locate {id}" - prints current plane location</value>
+  </data>
+  <data name="HelpPrintCmd" xml:space="preserve">
+    <value>"print {id}" - prints info about all available planes if called without args;   print particular plane info if plane id is entered as argument</value>
+  </data>
+  <data name="HelpStatusCmd" xml:space="preserve">
+    <value>"status {id}" - prints if particular plane is active or is waiting</value>
+  </data>
+  <data name="HelpStratCmd" xml:space="preserve">
+    <value>"start {id}" - starts flight, id - number of plane argument</value>
+  </data>
+  <data name="PlaneActiveMsg" xml:space="preserve">
+    <value>Plane number {0} is active</value>
+  </data>
+  <data name="PlaneCurrentLocationInfo" xml:space="preserve">
+    <value>Plane number: {0}; Current position: lat - {1}, lng - {2}, alt - {3}</value>
+  </data>
+  <data name="PlaneInfo" xml:space="preserve">
+    <value>Plane number: {0}; Status: {1}</value>
+  </data>
+  <data name="PlaneWaitingMsg" xml:space="preserve">
+    <value>Plane number {0} is waiting</value>
+  </data>
+  <data name="SmthWentWrongMsg" xml:space="preserve">
+    <value>Something went wrong, please, make sure you have build FlightDisplay.sln</value>
+  </data>
   <data name="StartMsg" xml:space="preserve">
     <value>Welcome to Plane Flights Emulator program. Please use -help command to see the list of available commands</value>
   </data>
+  <data name="WaitingStatusMsg" xml:space="preserve">
+    <value>waiting</value>
+  </data>
   <data name="WrongCommandMsg" xml:space="preserve">
     <value>Wrong command</value>
+  </data>
+  <data name="WrongPlaneNumberdMsg" xml:space="preserve">
+    <value>Wrong plane number</value>
   </data>
 </root>

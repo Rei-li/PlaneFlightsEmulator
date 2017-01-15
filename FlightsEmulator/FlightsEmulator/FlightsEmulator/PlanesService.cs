@@ -4,48 +4,44 @@ using System.Configuration;
 using System.Diagnostics;
 using System.IO;
 using System.IO.MemoryMappedFiles;
-using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Newtonsoft.Json.Bson;
+using Newtonsoft.Json;
 
 namespace FlightsEmulator
 {
     class PlanesService : IPlanesService
     {
-        IPlanesRepository _repository;
-        //List<ActivePlaneModel> _activePlanes = new List<ActivePlaneModel>();
-        Dictionary<int, CancellationTokenSource> _activePlanes = new Dictionary<int, CancellationTokenSource>();
-        Dictionary<int, InterprocessDTO> _dtos = new Dictionary<int, InterprocessDTO>();
+        readonly IPlanesRepository _repository;
+        readonly Dictionary<int, InterprocessDTO> _dtos = new Dictionary<int, InterprocessDTO>();
 
-        private readonly static string _display = ConfigurationManager.AppSettings["FlightDisplayApp"];
+        private const string DISPLAY_APP_SETTINGS = "FlightDisplayApp";
+        private readonly static string Display = ConfigurationManager.AppSettings[DISPLAY_APP_SETTINGS];
 
         public PlanesService()
         {
             _repository = new PlanesRepository();
         }
 
-        public void StartFlight(int planeId)
+        /// <summary>
+        /// starts new process, in wich plane starts flight
+        /// </summary>
+        /// <param name="planeId">id of plane to start flight</param>
+        /// <returns>task object wich starts process for flight</returns>
+        public Task StartFlight(int planeId)
         {
             if (!CheckIfActive(planeId))
             {
-
                 var plane = GetPlaneById(planeId);
                 var planeString = plane.JsonOut();
 
-                var tokenSource = new CancellationTokenSource();
-                var token = tokenSource.Token;
-
-
-                var task = Task.Run(() =>
+                return Task.Run(() =>
                 {
                     var fileName = Guid.NewGuid().ToString();
                     var mutexName = Guid.NewGuid().ToString();
-
                     var bufferSize = Encoding.Default.GetByteCount(planeString);
-
-                    Console.WriteLine(fileName);
+                    
                     using (MemoryMappedFile mmf = MemoryMappedFile.CreateNew(fileName, bufferSize))
                     {
                         bool mutexCreated;
@@ -56,82 +52,89 @@ namespace FlightsEmulator
                             writer.Write(planeString);
                         }
                         mutex.ReleaseMutex();
-
-                        Console.WriteLine(fileName);
+                       
                         InterprocessDTO dto = new InterprocessDTO()
                         {
                             MemoryMappedFileName = fileName,
                             MutexName = mutexName
                         };
+
                         _dtos.Add(planeId, dto);
 
-                        var process = Process.Start(_display.ToString(), dto.JsonOut().ToString());
-                        process.WaitForExit();
-                        var exitCode = process.ExitCode;
+                        var process = Process.Start(Display.ToString(), fileName + " " + mutexName);
+                        process?.WaitForExit();
 
+                        _dtos.Remove(planeId);
                     }
-                }, token).ContinueWith((result) =>
-                {
-                    _activePlanes.Remove(planeId);
                 });
-                _activePlanes.Add(planeId, tokenSource);
+
             }
+            return null;
         }
         
-        public void ResetFlight(int planeId)
-        {
-            //var activePlane = _activePlanes.Single(p => p.Plane.Id == plane.Id);
-            //activePlane.TokenSource.Cancel();
-            //_activePlanes.Remove(activePlane);
-            if (CheckIfActive(planeId))
-            {
-                CancellationTokenSource cancellationSource = null;
-                _activePlanes.TryGetValue(planeId, out cancellationSource);
-                cancellationSource?.Cancel();
-                _activePlanes.Remove(planeId);
-                ResetLocation(planeId);
-            }
-        }
-
+        /// <summary>
+        /// check if plane is active or is waiting
+        /// </summary>
+        /// <param name="planeId">plane id to chech</param>
+        /// <returns></returns>
         public bool CheckIfActive(int planeId)
         {
-          return  _activePlanes.ContainsKey(planeId);
+          return _dtos.ContainsKey(planeId);
         }
 
+        /// <summary>
+        /// get curren plane location
+        /// </summary>
+        /// <param name="id">id of plane to find location</param>
+        /// <returns>current location</returns>
         public PathPoint GetCurrentLocation(int id)
         {
-            //if (CheckIfActive(id))
-            //{
-               
-            //}
-            //else
-            //{
-                return GetPlaneById(id).CurrentLocation;
-            //}
+            PathPoint point = null;
+            if (CheckIfActive(id))
+            {
+                InterprocessDTO dto = null;
+                if (_dtos.TryGetValue(id, out dto) && dto != null)
+                {
+                    using (MemoryMappedFile mmf = MemoryMappedFile.OpenExisting(dto.MemoryMappedFileName))
+                    {
+                        Mutex mutex = Mutex.OpenExisting(dto.MutexName);
+                        mutex.WaitOne();
+                        using (MemoryMappedViewStream stream = mmf.CreateViewStream())
+                        {
+                            BinaryReader reader = new BinaryReader(stream);
+                            var result = reader.ReadString();
+                            point = JsonConvert.DeserializeObject<PathPoint>(result);
+                        }
+
+                        mutex.ReleaseMutex();
+                    }
+                }
+            }
+            else
+            {
+                point =  GetPlaneById(id).CurrentLocation;
+            }
+            return point;
         }
 
+        /// <summary>
+        /// get list of all planes available
+        /// </summary>
+        /// <returns>planes' list</returns>
         public IList<PlaneModel> GetAllPlanes()
         {
             return _repository.GetAllPlanes();
         }
 
-
+        /// <summary>
+        /// get particular plane
+        /// </summary>
+        /// <param name="id">id of plane to get</param>
+        /// <returns>plane</returns>
         public PlaneModel GetPlaneById(int id)
         {
             return _repository.GetPlaneById(id);
         }
-
-        private void ResetLocation(int id)
-        {
-            _repository.ResetLocation(id);
-        }
-
-        private void ResetAll()
-        {
-            _repository = new PlanesRepository();
-        }
-
-
 
     }
 }

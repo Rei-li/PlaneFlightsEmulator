@@ -13,6 +13,15 @@ namespace FlightDisplay
 {
     class Program
     {
+
+        #region Constants
+
+        private const int FILE_NAME_ARG_NUMBER = 0;
+        private const int MUTEX_ARG_NUMBER = 1;
+
+
+        #endregion
+
         static void Main(string[] args)
         {
             PlaneModel plane = null;
@@ -20,16 +29,18 @@ namespace FlightDisplay
             {
                 
                 Console.WriteLine(args[0]);
-                var dto = JsonConvert.DeserializeObject<InterprocessDTO>(args[0]);
+//                var dto = JsonConvert.DeserializeObject<InterprocessDTO>(args[0]);
+                var memoryMappedFileName = args[FILE_NAME_ARG_NUMBER];
+                var mutexName = args[MUTEX_ARG_NUMBER];
 
-                if (!string.IsNullOrEmpty(dto.MutexName) && !string.IsNullOrEmpty(dto.MemoryMappedFileName))
+                if (!string.IsNullOrEmpty(mutexName) && !string.IsNullOrEmpty(memoryMappedFileName))
                 {
                     try
                     {
-                        using (MemoryMappedFile mmf = MemoryMappedFile.OpenExisting(dto.MemoryMappedFileName))
+                        using (MemoryMappedFile mmf = MemoryMappedFile.OpenExisting(memoryMappedFileName))
                         {
 
-                            Mutex mutex = Mutex.OpenExisting(dto.MutexName);
+                            Mutex mutex = Mutex.OpenExisting(mutexName);
                             mutex.WaitOne();
                             using (MemoryMappedViewStream stream = mmf.CreateViewStream())
                             {
@@ -63,6 +74,7 @@ namespace FlightDisplay
 
 
                         }
+                        Environment.Exit(0);
                     }
                     catch (FileNotFoundException)
                     {
@@ -73,7 +85,7 @@ namespace FlightDisplay
            
 
          
-            Console.ReadLine();
+            
 
         }
 

@@ -1,17 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 
 namespace FlightsEmulator
 {
     internal class PlanesRepository : IPlanesRepository
     {
-        private IList<PlaneModel> _planes = new List<PlaneModel>();
+        private readonly IList<PlaneModel> _planes = new List<PlaneModel>();
 
         private readonly string _file = ConfigurationManager.AppSettings["SourceFile"];
         private readonly string _directoryPath = ConfigurationManager.AppSettings["RepositoryPath"];
@@ -37,39 +34,34 @@ namespace FlightsEmulator
                     }
                     plane.Id = planeId;
                     plane.CurrentLocation = plane.Path.First();
-                    //plane.CurrentLat = plane.Path.First().lat;
-                    //plane.CurrentLng = plane.Path.First().lng;
-                    //plane.CurrentAlt = plane.Path.First().alt;
                     _planes.Add(plane);
                     planeId++;
                 }
 
             }
+            else
+            {
+                throw new FileNotFoundException();
+            }
         }
 
-
+        /// <summary>
+        /// get list of all planes available
+        /// </summary>
+        /// <returns>planes' list</returns>
         public IList<PlaneModel> GetAllPlanes()
         {
             return _planes;
         }
 
+        /// <summary>
+        /// get particular plane
+        /// </summary>
+        /// <param name="id">id of plane to get</param>
+        /// <returns>plane</returns>
         public PlaneModel GetPlaneById(int id)
         {
             return _planes.FirstOrDefault(p => p.Id == id);
         }
-
-        public void ResetLocation(int id)
-        {
-            var plane = _planes.FirstOrDefault(p => p.Id == id);
-            if (plane != null)
-            {
-                plane.CurrentLocation = plane.Path.First();
-                //plane.CurrentLat = plane.Path.First().lat;
-                //plane.CurrentLng = plane.Path.First().lng;
-                //plane.CurrentAlt = plane.Path.First().alt;
-            }
-           
-        }
-
     }
 }
