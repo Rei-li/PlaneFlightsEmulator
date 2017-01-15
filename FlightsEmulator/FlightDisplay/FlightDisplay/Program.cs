@@ -24,12 +24,8 @@ namespace FlightDisplay
 
         static void Main(string[] args)
         {
-            PlaneModel plane = null;
             if (args.Any())
             {
-                
-                Console.WriteLine(args[0]);
-//                var dto = JsonConvert.DeserializeObject<InterprocessDTO>(args[0]);
                 var memoryMappedFileName = args[FILE_NAME_ARG_NUMBER];
                 var mutexName = args[MUTEX_ARG_NUMBER];
 
@@ -42,23 +38,24 @@ namespace FlightDisplay
 
                             Mutex mutex = Mutex.OpenExisting(mutexName);
                             mutex.WaitOne();
+                            PlaneModel plane = null;
                             using (MemoryMappedViewStream stream = mmf.CreateViewStream())
                             {
                                 BinaryReader reader = new BinaryReader(stream);
                                 var result = reader.ReadString();
                                 plane = JsonConvert.DeserializeObject<PlaneModel>(result);
                             }
-                            
+
                             mutex.ReleaseMutex();
 
 
                             if (plane != null)
                             {
-                                Console.WriteLine("Plane number: " + plane.Id);
+                                Console.WriteLine(Resources.PlaneNumberMsg, plane.Id);
                                 foreach (var point in plane.Path)
                                 {
                                     plane.CurrentLocation = point;
-                                    
+
                                     mutex.WaitOne();
                                     using (MemoryMappedViewStream stream = mmf.CreateViewStream())
                                     {
@@ -68,7 +65,7 @@ namespace FlightDisplay
                                     mutex.ReleaseMutex();
 
                                     Thread.Sleep(1000);
-                                    PrintPlaneInfo(point);
+                                    Console.WriteLine(Resources.CurrentPositionMsg, point.lat, point.lng, point.alt);
                                 }
                             }
 
@@ -78,21 +75,12 @@ namespace FlightDisplay
                     }
                     catch (FileNotFoundException)
                     {
-                        Console.WriteLine("Memory-mapped file does not exist. Run Process A first, then B.");
+                        Console.WriteLine(Resources.FileNotExistMsg);
                     }
                 }
             }
-           
-
-         
-            
 
         }
 
-        private static void PrintPlaneInfo(PathPoint point)
-        {
-            Console.WriteLine("Current position: lat - " + point.lat +
-                              ", lng - " + point.lng + ", alt - " + point.alt);
-        }
     }
 }
